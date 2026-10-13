@@ -106,7 +106,7 @@ final class TokenExchangeTests: XCTestCase {
         XCTAssertEqual(sent.request.url?.absoluteString, "https://backend.test/sonos/token")
         XCTAssertEqual(sent.request.httpMethod, "POST")
         XCTAssertNil(sent.request.value(forHTTPHeaderField: "Authorization"))
-        XCTAssertEqual(json(sent.body), ["code": "CODE"])
+        XCTAssertEqual(json(sent.body), ["code": "CODE", "redirectUri": "https://backend.test/sonos/callback"])
         let token = try await manager.validToken()
         XCTAssertEqual(token, "A2")
     }

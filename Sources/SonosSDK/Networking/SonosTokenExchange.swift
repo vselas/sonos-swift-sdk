@@ -64,9 +64,11 @@ public struct SonosDirectTokenExchange: SonosTokenExchanging {
 }
 
 /// Exchanges through a server that holds the integration's secret: `POST
-/// <base>/sonos/token` with `{"code"}` and `POST <base>/sonos/refresh` with
-/// `{"refreshToken"}`, both answering with the Sonos token JSON. The server
-/// fixes the redirect URI itself.
+/// <base>/sonos/token` with `{"code", "redirectUri"}` and `POST
+/// <base>/sonos/refresh` with `{"refreshToken"}`, both answering with the
+/// Sonos token JSON. The server accepts only the redirect URIs registered for
+/// the integration, so builds can sign in with different ones (e.g. a custom
+/// scheme in debug builds, an HTTPS link in the store build).
 public struct SonosBackendTokenExchange: SonosTokenExchanging {
     private let baseURL: URL
     private let session: URLSession
@@ -77,7 +79,7 @@ public struct SonosBackendTokenExchange: SonosTokenExchanging {
     }
 
     public func exchange(code: String, redirectURI: String) async throws -> TokenManager.TokenResponse {
-        try await post("sonos/token", ["code": code])
+        try await post("sonos/token", ["code": code, "redirectUri": redirectURI])
     }
 
     public func refresh(refreshToken: String) async throws -> TokenManager.TokenResponse {

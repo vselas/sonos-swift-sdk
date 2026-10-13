@@ -140,8 +140,9 @@ published app therefore talks to the cloud only:
 
 - **Sign-in without the secret in the app:** the integration's secret stays on
   your server, which trades codes and refresh tokens (`POST /sonos/token` with
-  `{"code"}`, `POST /sonos/refresh` with `{"refreshToken"}`, both answering with
-  the Sonos token JSON).
+  `{"code", "redirectUri"}`, `POST /sonos/refresh` with `{"refreshToken"}`, both
+  answering with the Sonos token JSON). The server checks the redirect URI
+  against the ones registered for the integration.
 
   ```swift
   let manager = SonosManager(keyName: "MyApp", key: clientKey, redirectURI: redirectURI,
